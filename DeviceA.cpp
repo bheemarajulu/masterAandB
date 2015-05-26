@@ -19,13 +19,17 @@ if (Serial.available()) {
       altSerial.begin(57600); 
       altSerial.println("A");
       altSerial.println("I am A");
+      Serial.flush ();
+    // wait for transmit buffer to empty
+      //while ((UCSR0A & _BV (TXC0)) == 0)
+         // {}
      }
 } 
 if (Serial.available()) {
-   if (Serial.read() == 'B') // Transmit 
+   if ((Serial.read() == 'B') || (Serial.read() == 'C')  || (Serial.read() == 'D')  || (Serial.read() == 'E'))// Transmit 
     { 
-      
-     pinMode(9, OUTPUT);           // set pin to INPUT state if not already an INPUT
+     Serial.flush();
+      pinMode(9, OUTPUT);           // set pin to INPUT state if not already an INPUT
       digitalWrite(9, HIGH);       // turn on pullup resistors
     
       /* this tended to confuse people with the digitalWrite so the language added */
@@ -34,7 +38,8 @@ if (Serial.available()) {
                                    // both forms work, INPUT_PULLUP
                                    // is probably preferred for clarity
       //delayMicroseconds(50);
-      Serial.println("B! is ON and A Transmit-2 diabled");      
+      Serial.println("A! is ON and B,C,D,E Transmit-2 diabled");  
+      delay(1);     
      }
 }
 }
