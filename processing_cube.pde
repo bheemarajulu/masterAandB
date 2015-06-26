@@ -11,6 +11,10 @@ float yaw   = 0.0F;
 float temp  = 0.0F;
 float alt   = 0.0F;
 String cube;
+boolean green = false;
+boolean blue = false;
+boolean red = false;
+boolean yellow = false;
 OBJModel model;
 
 // Serial port state.
@@ -71,7 +75,7 @@ void setup()
  
 void draw()
 {
-  background(0,10,20);
+  background(255,255,255);
   //background(255);
 
   textFont(f);       
@@ -82,9 +86,25 @@ void draw()
   text(pitch, 460 , 100); //debug things… text(Hauteur, 10, 60);
   text("Yaw: ", 650, 100); //debug things… text(Hauteur, 10, 60);
   text(yaw, 730, 100); //debug things… text(Hauteur, 10, 60);
-  text("cube: ", 650, 200); //debug things… text(Hauteur, 10, 60);
-  //text(cube, 180, 200); //debug things… text(Hauteur, 10, 60);
+  //text("cube: ", 650, 200); //debug things… text(Hauteur, 10, 60);
+  //fill(value);  
   // Set a new co-ordinate space
+  if(green == true)
+  {
+      // No fourth argument means 100% opacity.
+      text("Green ", 650, 200); //debug things… text(Hauteur, 10, 60);
+      fill(0,128,0);
+      rect(0,0,100,200);
+  }
+  if (blue==true)
+  {
+           
+      // No fourth argument means 100% opacity.
+      text("Blue: ", 650, 300); //debug things… text(Hauteur, 10, 60);
+      fill(0,0,255);
+      rect(0,100,100,200);
+  }
+
   pushMatrix();
   //text(roll, 10, 30); //debug things...
   //text(pitch, 10, 60); 
@@ -114,6 +134,14 @@ void draw()
   popMatrix();
   popMatrix();
   port.write('W');
+  
+  if (mousePressed == true) 
+  {                           //if we clicked in the window
+   port.write('R');        //send a 1   
+   println("R");   
+  } 
+  else delay(40);
+  
   //print("draw");
 }
 
@@ -149,16 +177,22 @@ void serialEvent(Serial p)
       roll  = float(list[1]);
       pitch = float(list[2]);
       yaw   = float(list[3]);
-      println(trim(list[4]));
-      /*if(list[4].equals("Green "))
+      cube = (trim(list[4]));
+      println(cube);
+      if (cube.equals("Green"))
       {
-      cube  = trim(list[4]);
-      println("I am Good");
+         green = true;      
       }
-      buffer = incoming;
-    }
-    */
-  }
+      else if (cube.equals("blue"))
+      {
+         blue = true;      
+      }
+      else 
+      {
+      green = false;
+      blue = false;
+      }
+   }
     if ( (list.length > 0) && (list[0].equals("Alt:")) ) 
     {
       alt  = float(list[1]);
